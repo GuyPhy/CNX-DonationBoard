@@ -15,21 +15,40 @@ bool compareJsonResponses(String newResponse) {
 }
 
 bool parseJsonResponse(String jsonResponse, String &chain, float &amount, String &currency, float &valueUsd, String &userName, String &wallet) {
-  StaticJsonDocument<1024> doc;
+  Serial.println("Parsing JSON response...");
+  // Serial.println(jsonResponse);
+  StaticJsonDocument<2048> doc;
   DeserializationError error = deserializeJson(doc, jsonResponse);
 
   if (error) {
-    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
     return false;
   }
 
-  chain = doc["chain"].as<String>();
-  amount = doc["amount"].as<float>();
-  currency = doc["currency"].as<String>();
-  valueUsd = doc["valueUsd"].as<float>();
-  userName = doc["user"]["name"].as<String>();
-  wallet = doc["user"]["wallet"].as<String>();
+  JsonObject donation = doc["data"]["donationsByProjectId"]["donations"][0];
+  Serial.println("Donation object:");
+  serializeJson(donation, Serial);
+  Serial.println();
+
+  // Validate the donation object
+  if (!donation.containsKey("chainType") || !donation["chainType"].is<String>() ||
+      !donation.containsKey("amount") || !donation["amount"].is<float>() ||
+      !donation.containsKey("currency") || !donation["currency"].is<String>() ||
+      !donation.containsKey("valueUsd") || !donation["valueUsd"].is<float>() ||
+      !donation.containsKey("user") || !donation["user"].is<JsonObject>() ||
+      !donation["user"].containsKey("name") || !donation["user"]["name"].is<String>() ||
+      !donation["user"].containsKey("walletAddress") || !donation["user"]["walletAddress"].is<String>()) {
+    Serial.println(F("Invalid donation object"));
+    return false;
+  }
+
+  chain = donation["chainType"].as<String>();
+  amount = donation["amount"].as<float>();
+  currency = donation["currency"].as<String>();
+  valueUsd = donation["valueUsd"].as<float>();
+  userName = donation["user"]["name"].as<String>();
+  wallet = donation["user"]["walletAddress"].as<String>();
 
   return true;
 }

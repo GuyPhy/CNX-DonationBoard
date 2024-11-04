@@ -21,8 +21,7 @@ void loop() {
 
     // Serial.println("JSON RESPONSE");
     // Serial.println(jsonResponse);
-    bool hasChanged = false;
-    hasChanged = compareJsonResponses(jsonResponse);  // Compare responses
+    bool hasChanged = compareJsonResponses(jsonResponse);  // Compare responses
 
     if (hasChanged) {
       Serial.println("Response has changed!");
@@ -30,7 +29,8 @@ void loop() {
       String chain, currency, userName, wallet;
       float amount, valueUsd;
 
-      bool hasParsed = parseJsonResponse(jsonResponse, chain, amount, currency, valueUsd, userName, wallet);
+      bool hasParsed = false;
+      hasParsed = parseJsonResponse(jsonResponse, chain, amount, currency, valueUsd, userName, wallet);
 
       Serial.println("parse status");
       Serial.println(hasParsed);
