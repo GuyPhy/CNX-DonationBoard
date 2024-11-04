@@ -19,8 +19,6 @@ void loop() {
     lastRequestTime = currentTime;
     String jsonResponse = sendRequest(); // Make HTTPS request
 
-    // Serial.println("JSON RESPONSE");
-    // Serial.println(jsonResponse);
     bool hasChanged = compareJsonResponses(jsonResponse);  // Compare responses
 
     if (hasChanged) {
