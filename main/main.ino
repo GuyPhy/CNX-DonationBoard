@@ -20,33 +20,35 @@ const uint8_t kScrollingLayerOptions = (SM_SCROLLING_OPTIONS_NONE);
 SMARTMATRIX_ALLOCATE_BUFFERS(matrix, kMatrixWidth, kMatrixHeight, kRefreshDepth, kDmaBufferRows, kPanelType, kMatrixOptions);
 SMARTMATRIX_ALLOCATE_SCROLLING_LAYER(scrollingLayer, kMatrixWidth, kMatrixHeight, COLOR_DEPTH, kScrollingLayerOptions);
 
-rgb24 textColor = {255, 255, 255};  // Default text color
+rgb24 textColor = {20, 4, 77};  // Default text color
 
 unsigned long lastRequestTime = 0;
 const unsigned long requestInterval = 30000;  // 30 seconds
 
-void setup() {
-  Serial.begin(115200);
-  connectToWiFi();          // Initialize WiFi
-  initializeStorage();      // Initialize data storage
-  
-  // Initialize display
-  matrix.addLayer(&scrollingLayer);
-  matrix.begin();
-  matrix.setBrightness(80);      // Adjust brightness level as needed
-  scrollingLayer.setMode(wrapForward);
-  scrollingLayer.setColor(textColor);
-  scrollingLayer.setSpeed(50);   // Adjust scrolling speed as desired
-  scrollingLayer.setFont(font6x10); // Set font; change to desired size or style
-  scrollingLayer.setOffsetFromTop((kMatrixHeight / 2) - 5);
-  
-  // Display initial message
-  scrollingLayer.start("Welcome to the LED scrolling text display!", -1);
-}
-
 void displayText(const String &text) {
   scrollingLayer.stop();              // Stop any previous scrolling
   scrollingLayer.start(text.c_str(), -1);  // Start scrolling the new text, repeat indefinitely
+}
+
+void setup() {
+  Serial.begin(115200);
+  
+  // Initialize WiFi and get status message
+  String wifiStatus = connectToWiFi();  // Connect to WiFi and get status message
+  initializeStorage();                   // Initialize data storage
+  
+  // Set up the scrolling layer
+  matrix.addLayer(&scrollingLayer);
+  matrix.begin();
+  matrix.setBrightness(80);              // Adjust brightness level as needed
+  scrollingLayer.setMode(wrapForward);
+  scrollingLayer.setColor(textColor);
+  scrollingLayer.setSpeed(50);           // Adjust scrolling speed as desired
+  scrollingLayer.setFont(font8x13);      // Set font; change to desired size or style
+  scrollingLayer.setOffsetFromTop((kMatrixHeight / 2) - 5);
+  
+  // Display WiFi status message
+  displayText(wifiStatus);       // Display the WiFi status message
 }
 
 void loop() {
@@ -75,7 +77,7 @@ void loop() {
         Serial.println("Wallet: " + wallet);
 
         // Display parsed data on the LED panel
-        String displayMessage = "User: " + userName + " donated " + String(amount) + " " + currency + " (USD " + String(valueUsd) + ")";
+        String displayMessage = "Donor " + userName + " donated " + String(amount) + " " + currency + " (USD " + String(valueUsd) + ")";
         displayText(displayMessage);
       } else {
         Serial.println("Failed to parse JSON response.");
