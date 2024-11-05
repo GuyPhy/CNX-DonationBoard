@@ -44,17 +44,21 @@ This project is an open-source application that checks the status of a multisig 
    ```
 
 2. **Install Required Libraries**
-    - Open the Arduino IDE, go to `Sketch -> Include Library -> Manage Libraries`
-    - Search for and install the `SmartMatrix`, `WiFi`, and `Arduino JSON` libraries
+
+- Open the Arduino IDE, go to `Sketch -> Include Library -> Manage Libraries`
+- Search for and install the `SmartMatrix`, `WiFi`, and `Arduino JSON` libraries
 
 3. **Configure WiFi**
-    - Update the `[wifi_config.h](./main/utils/wifi_config.h)` file with your WiFi SSID and password
+
+- Update the `[wifi_config.h](./main/utils/wifi_config.h)` file with your WiFi SSID and password
 
 4. **Upload the Code**
-    - Open the [main sketch](./main/main.ino) in the Arduino IDE
-    - Select your ESP32 board from `Tools -> Board`.
-    > Original Sketch is tested with `ESP32 v3.0.5`, use `ESP32 DEV Board` connected to a Serial port on you computer.
-    - Upload the code to your ESP32 board.
+
+- Open the [main sketch](./main/main.ino) in the Arduino IDE
+- Select your ESP32 board from `Tools -> Board`.
+- Upload the code to your ESP32 board.
+
+> Original Sketch is tested with `ESP32 v3.0.5`, use `ESP32 DEV Board` connected to a Serial port on you computer.
 
 ## Usage
 
