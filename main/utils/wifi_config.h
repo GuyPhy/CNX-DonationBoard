@@ -3,8 +3,8 @@
 
 #include <WiFi.h>
 
-const char* ssid = "4seasNimman";  // Replace with your SSID
-const char* password = "sabai4seas";  // Replace with your Password
+const char* ssid = "YourSSID";  // Replace with your SSID
+const char* password = "YourPassword";  // Replace with your Password
 
 // Function to connect to WiFi with error handling
 String connectToWiFi() {
